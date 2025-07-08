@@ -1,61 +1,23 @@
-## 🔍 **Key Points Explained**
+### 📌 **Main Idea:**
 
-### ✔️ **Performance Monitoring is Still Essential in the Cloud**
-
-- In an **on-premises environment**, DBAs manage the **hardware, OS, and SQL Server settings**.
-- In **Azure SQL**, Microsoft manages the hardware and much of the infrastructure.
-- As a DBA, you **lose direct control over the hardware**, but you are still responsible for ensuring your **databases run efficiently**.
-- Therefore, **monitoring performance and identifying issues proactively** becomes even more important.
+When you move a database to **Azure SQL (cloud)**, performance monitoring remains a **critical responsibility** of a **Database Administrator (DBA)**, even though some **hardware-level controls** (common in on-premises environments) are no longer available. As a DBA, you must understand how to **monitor**, **diagnose**, and **optimize performance issues** using the tools Azure provides.
 
 ---
 
-## 🎯 **Learning Objectives of This Module**
+### ✅ **Key Learning Objectives Explained:**
 
-| **Objective**                                | **Explanation**                                                                                           |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
-| **Understand performance issues**            | Learn how to **identify slow queries, resource bottlenecks**, and system issues in Azure SQL.             |
-| **Identify critical Azure metrics**          | Know which metrics (CPU, DTU, storage, IO, etc.) to watch in the **Azure portal or monitoring tools**.    |
-| **Collect baseline metrics**                 | Establish **what "normal" performance looks like**, so you can spot problems when they occur.             |
-| **Use Extended Events**                      | Analyze **deeper query and performance data** using SQL Server’s built-in diagnostics.                    |
-| **Understand database watcher (DB Watcher)** | Learn about Azure SQL’s **automated monitoring services** like Intelligent Insights and Database Watcher. |
-
----
-
-## 📈 **What Will You Learn in the Next Units?**
-
-- Tools like:
-
-  - **Azure Monitor**
-  - **SQL Insights**
-  - **Query Performance Insight**
-  - **Dynamic Management Views (DMVs)**
-  - **Extended Events**
-
-- How to:
-
-  - Set up alerts for performance issues.
-  - Analyze slow-running queries.
-  - Optimize resource usage.
-  - Compare current metrics against a baseline.
+| Learning Objective                      | Explanation                                                                                                                                                                   |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Review potential performance issues** | Learn how to identify symptoms of poor database performance (e.g., slow queries, resource bottlenecks).                                                                       |
+| **Identify critical Azure metrics**     | Understand which Azure resource metrics (CPU, DTU, IOPS, etc.) and SQL database metrics matter most for monitoring performance.                                               |
+| **Collect metrics for a baseline**      | Learn how to collect normal operating metrics so that future problems can be compared against this "baseline" for easier troubleshooting.                                     |
+| **Use Extended Events for analysis**    | Gain skills in using **Extended Events**, a lightweight performance monitoring and troubleshooting tool in SQL Server and Azure SQL, for in-depth query performance analysis. |
+| **Understand Database Watcher**         | Learn about **Azure SQL Database Watcher**, a newer monitoring tool designed to simplify database performance monitoring and observability.                                   |
 
 ---
 
-## 🛡️ **Why This is Important**
+### 🛡️ **Key Takeaway:**
 
-Unlike on-prem, in Azure you cannot:
-
-- Upgrade the CPU manually.
-- Increase disk speed on the fly.
-- Check physical memory performance.
-
-➡️ So, you must be **proactive in monitoring performance indicators**, tuning queries, and scaling database resources as needed.
-
----
-
-### ✅ **Summary**
-
-- Monitoring in Azure SQL is **critical because you have less control over the underlying hardware**.
-- You'll use Azure's tools to monitor and optimize performance.
-- This section prepares you to learn the **tools and techniques for tracking and improving database performance in Azure SQL.**
+You still need **active performance management in Azure SQL**, but you rely more on **platform-provided monitoring tools** and **cloud metrics**, rather than hardware-level tuning. Mastering Azure's tools will help you quickly detect and resolve bottlenecks.
 
 ---
