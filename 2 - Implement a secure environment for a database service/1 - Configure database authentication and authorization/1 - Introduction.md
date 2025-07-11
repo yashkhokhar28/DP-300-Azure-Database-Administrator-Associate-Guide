@@ -1,11 +1,5 @@
 ### **Context of the Module**
 
-- The training module is part of a **Level 4 training track**, focused on **securing Azure SQL environments**.
-- You have earned **3,750 XP out of 5,299 XP**, indicating your learning progress.
-- This unit is titled: **“Implement a secure environment for a database service: Configure database authentication and authorization”**.
-
----
-
 ### **Key Concepts Explained**
 
 #### ✅ **Authentication and Authorization in Azure SQL**
