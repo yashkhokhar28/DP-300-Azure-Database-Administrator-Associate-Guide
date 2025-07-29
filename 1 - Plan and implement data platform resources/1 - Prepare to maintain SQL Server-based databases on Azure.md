@@ -1,4 +1,4 @@
-## 🧠 ** SQL Server in Azure (IaaS vs PaaS) Explained Simply**
+## 🧠 **SQL Server in Azure (IaaS vs PaaS) Explained Simply**
 
 Think of Azure as a **big virtual computer store** where you can rent space to run your SQL Server – either as a **complete machine (IaaS)** or as a **managed service (PaaS)**.
 
