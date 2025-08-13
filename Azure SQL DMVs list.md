@@ -78,5 +78,3 @@ Quickly identify which session is consuming the most CPU and what query it’s r
 ---
 
 *Reference: [Microsoft Learn – Dynamic Management Views in Azure SQL](https://learn.microsoft.com/en-us/azure/azure-sql/database/monitoring-with-dmvs)*
-
-```
