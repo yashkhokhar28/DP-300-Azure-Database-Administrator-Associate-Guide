@@ -1,80 +1,51 @@
-
-# Azure SQL Session-Related Dynamic Management Views (DMVs)
-
-This document lists **all session-related DMVs** available in **Azure SQL Database** and **Azure SQL Managed Instance**, including their purpose and real-world use cases.  
-These DMVs help track connection state, activity, resource usage, and query details at the session level.
+## Azure SQL Dynamic Management Views (DMVs)
 
 ---
 
-## Table of Session-Related DMVs
+### **1. Plan and Implement Data Platform Resources**
 
-| DMV Name | Description | Real-World Example |
-|----------|-------------|--------------------|
-| **sys.dm_exec_sessions** | Lists all active sessions (user and internal) with login, host, program, login time, and TTL. | Identify idle but connected sessions consuming resources. |
-| **sys.dm_exec_connections** | Shows physical connection details (protocol, IP, encryption, connect time). | Detect insecure connections or connections from unexpected IP ranges. |
-| **sys.dm_exec_requests** | Displays current executing requests per session with status, timings, and wait info. | Find and terminate a blocking query that's slowing down the app. |
-| **sys.dm_exec_requests_history** *(Azure-only)* | Provides historical data of requests per session. | Audit activity for a noisy tenant in a multi-tenant database. |
-| **sys.dm_db_session_space_usage** | Tracks TempDB space (pages allocated/deallocated) per session. | Find which session is consuming excessive TempDB space. |
-| **sys.dm_db_task_space_usage** | Shows TempDB usage per task within sessions. | Isolate a subtask inside a session that's bloating TempDB. |
-| **sys.dm_exec_cursors (session_id)** | Lists open cursors for a given session. | Identify abandoned cursors slowing down workloads. |
-| **sys.dm_exec_input_buffer (session_id, request_id)** | Reveals the last T-SQL statement executed by a session. | Catch ad-hoc, unoptimized queries causing performance hits. |
-| **sys.dm_exec_query_plan (plan_handle)** | Returns the execution plan for a request in a session. | Diagnose slow queries due to parameter sniffing or missing indexes. |
-| **sys.dm_exec_query_stats** | Provides aggregated query performance stats including CPU, I/O, execution counts. | Determine which session’s queries are the biggest CPU consumers. |
+| DMV                                  | Purpose                                                               | Azure SQL Notes                           | Real-World Example                      | Practice Question                                                     |
+| ------------------------------------ | --------------------------------------------------------------------- | ----------------------------------------- | --------------------------------------- | --------------------------------------------------------------------- |
+| `sys.dm_db_resource_stats`           | Shows CPU, data IO, log IO usage over the last hour (5-min intervals) | Available in Azure SQL Database only      | See which hour your DTU usage peaks     | **Q:** How would you identify peak CPU usage in the last hour?        |
+| `sys.resource_stats`                 | CPU, IO, storage for the last 14 days (15-min intervals)              | Azure-only view, queryable from master DB | Track workload trends over 2 weeks      | **Q:** Which DMV lets you check IO usage trends for the past 2 weeks? |
+| `sys.dm_user_db_resource_governance` | Resource limits for the DB (eDTUs, IO caps)                           | Azure-only                                | Check if your DB is hitting eDTU limits | **Q:** Which DMV shows current DTU limits?                            |
 
 ---
 
-## Typical Workflow for Session Monitoring
+### **2. Implement a Secure Environment**
 
-1. **Check who’s connected**  
-   Use `sys.dm_exec_sessions` + `sys.dm_exec_connections` to see login details and network origin.
-
-2. **Find active queries**  
-   Query `sys.dm_exec_requests` to see what’s running right now.
-
-3. **Look at history (Azure-only)**  
-   Use `sys.dm_exec_requests_history` to find past activity even if the session is gone.
-
-4. **Inspect TempDB usage**  
-   Check `sys.dm_db_session_space_usage` and `sys.dm_db_task_space_usage` for excessive allocations.
-
-5. **See exactly what was run**  
-   Pull the last query from `sys.dm_exec_input_buffer`.
-
-6. **Analyze performance**  
-   Use `sys.dm_exec_query_stats` + `sys.dm_exec_query_plan` to find tuning opportunities.
+| DMV                       | Purpose                                          | Azure SQL Notes    | Real-World Example                     | Practice Question                                                       |
+| ------------------------- | ------------------------------------------------ | ------------------ | -------------------------------------- | ----------------------------------------------------------------------- |
+| `sys.dm_exec_connections` | Shows current connections, protocols, encryption | Same as SQL Server | Check if clients are using TLS 1.2     | **Q:** How do you verify TLS encryption is enabled for all connections? |
+| `sys.dm_exec_sessions`    | Active sessions with login, app, host info       | Same               | Find suspicious logins from unknown IP | **Q:** Which DMV lists all active logins and their originating apps?    |
+| `sys.dm_exec_requests`    | Running queries & their state                    | Same               | Identify a blocking query              | **Q:** Which DMV do you use to find the exact SQL causing blocking?     |
 
 ---
 
-## Example Query: Find Top CPU-Consuming Sessions
+### **3. Monitor, Configure, and Optimize Database Resources**
 
-```sql
-SELECT 
-    s.session_id,
-    s.login_name,
-    c.client_net_address,
-    r.status,
-    r.cpu_time,
-    r.total_elapsed_time,
-    t.text AS query_text
-FROM sys.dm_exec_sessions s
-JOIN sys.dm_exec_connections c 
-    ON s.session_id = c.session_id
-JOIN sys.dm_exec_requests r 
-    ON s.session_id = r.session_id
-CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) t
-ORDER BY r.cpu_time DESC;
-````
-
-**Use Case:**
-Quickly identify which session is consuming the most CPU and what query it’s running.
+| DMV                                 | Purpose                              | Azure SQL Notes | Real-World Example                       | Practice Question                                                         |
+| ----------------------------------- | ------------------------------------ | --------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| `sys.dm_exec_query_stats`           | Aggregated query execution stats     | Same            | Find top 5 queries by CPU time           | **Q:** How do you find the most CPU-heavy query in the last hour?         |
+| `sys.dm_exec_query_plan`            | XML execution plan for a query       | Same            | Check for missing index hints            | **Q:** Which DMV do you join with `sys.dm_exec_sql_text` to get plans?    |
+| `sys.dm_db_index_usage_stats`       | Index seek/scan usage counts         | Same            | Drop unused indexes to save DTUs         | **Q:** How do you find indexes that haven’t been used since last restart? |
+| `sys.dm_db_index_operational_stats` | Low-level index ops like page splits | Same            | Detect high fragmentation on hot indexes | **Q:** Which DMV shows page split counts?                                 |
 
 ---
 
-## Permissions Required
+### **4. Configure and Manage Automation of Tasks**
 
-* **Azure SQL Database:** `VIEW DATABASE STATE`
-* **Azure SQL Managed Instance:** `VIEW SERVER STATE`
+| DMV                                      | Purpose                                       | Azure SQL Notes | Real-World Example          | Practice Question                                             |
+| ---------------------------------------- | --------------------------------------------- | --------------- | --------------------------- | ------------------------------------------------------------- |
+| `sys.dm_exec_background_job_queue`       | Shows queued background jobs (Azure internal) | Azure-only      | Debug Elastic Job execution | **Q:** Which DMV do you use for queued Elastic Job debugging? |
+| `sys.dm_exec_background_job_queue_stats` | Stats about background job execution          | Azure-only      | Identify job bottlenecks    | **Q:** Which DMV helps measure job run success vs failures?   |
 
 ---
 
-*Reference: [Microsoft Learn – Dynamic Management Views in Azure SQL](https://learn.microsoft.com/en-us/azure/azure-sql/database/monitoring-with-dmvs)*
+### **5. Plan and Configure HA/DR Environment**
+
+| DMV                                       | Purpose                          | Azure SQL Notes                       | Real-World Example                    | Practice Question                                               |
+| ----------------------------------------- | -------------------------------- | ------------------------------------- | ------------------------------------- | --------------------------------------------------------------- |
+| `sys.dm_hadr_database_replica_states`     | Sync state of DB replicas        | Same in Managed Instance & SQL Server | See if a secondary replica is lagging | **Q:** How do you find if a replica is in SYNCHRONIZED state?   |
+| `sys.dm_hadr_availability_replica_states` | Health of each AG replica        | Same                                  | Check failover readiness              | **Q:** Which DMV shows replica failover mode?                   |
+| `sys.dm_geo_replication_link_status`      | Status of active geo-replication | Azure-only                            | Find replication lag in seconds       | **Q:** Which DMV shows geo-replication latency in Azure SQL DB? |
