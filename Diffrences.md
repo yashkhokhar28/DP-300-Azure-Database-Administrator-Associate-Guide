@@ -226,3 +226,109 @@
 If you see *"Identify top queries"* → **QPI (Query Performance Insight)**.
 If you see *"Deep troubleshooting"* → **DMVs**.
 
+---
+
+## 1️⃣ Estimated Execution Plan
+
+🔹 **What it is**
+
+* Generated **before the query actually runs**.
+* Based on **statistics** (histograms, indexes, cardinality estimator).
+* Shows how SQL Server *thinks* it will execute the query.
+
+🔹 **What it includes**
+
+* **Operators** (Index Seek, Scan, Nested Loops, Hash Match, etc.).
+* **Estimated rows** processed at each step.
+* **Estimated cost percentages** (relative cost per operator).
+
+🔹 **When to use it**
+
+* To **predict performance impact** before running a heavy query (so you don’t bring prod down).
+* To **understand query shape** (joins, sorts, index usage) without execution.
+* To check **optimizer choices** if stats are stale.
+
+🔹 **Limitations**
+
+* May be **wildly inaccurate** if statistics are outdated.
+* Doesn’t show **actual runtime behavior** (e.g., spills to tempdb, actual row counts).
+
+---
+
+## 2️⃣ Actual Execution Plan
+
+🔹 **What it is**
+
+* Generated **after the query runs** (query must finish execution).
+* Includes **everything in the estimated plan** PLUS runtime metrics.
+
+🔹 **What it includes**
+
+* **Actual rows processed** at each operator (vs. estimated).
+* **Warnings** like: spills to tempdb, missing indexes, batch mode on rowstore.
+* Runtime statistics (I/O, CPU, memory usage).
+
+🔹 **When to use it**
+
+* To **debug slow queries** in real workloads.
+* To catch **row estimation mismatches** (e.g., optimizer thought 10 rows, got 10M).
+* To see **tempdb spills**, excessive parallelism, or missing indexes.
+
+🔹 **Limitations**
+
+* Query must actually run → can be risky on large queries in production.
+* Can be expensive to capture in very high throughput systems.
+
+---
+
+## 3️⃣ Side-by-Side Difference
+
+| Feature              | Estimated Execution Plan                           | Actual Execution Plan                           |
+| -------------------- | -------------------------------------------------- | ----------------------------------------------- |
+| **Generated When**   | Before execution                                   | After execution (query must complete)           |
+| **Basis**            | Statistics + optimizer                             | Statistics + optimizer + actual runtime data    |
+| **Row Counts**       | Estimated only                                     | Estimated + Actual rows                         |
+| **Runtime Warnings** | ❌ Not shown                                        | ✅ Shown (e.g., spills to tempdb)                |
+| **Usage Scenario**   | Safe preview, what *might* happen                  | Debugging real query performance issues         |
+| **Risk**             | Zero, query doesn’t run                            | Query must execute (can hurt prod)              |
+| **Tooling**          | SSMS → Ctrl+L ("Display Estimated Execution Plan") | SSMS → Ctrl+M ("Include Actual Execution Plan") |
+
+---
+
+## 4️⃣ Practical Example
+
+Say you run:
+
+```sql
+SELECT * 
+FROM Orders o
+JOIN Customers c ON o.CustomerID = c.CustomerID
+WHERE c.City = 'London';
+```
+
+* **Estimated Plan**:
+
+  * Says it expects 500 rows from Customers in London.
+  * Chooses Nested Loop join.
+
+* **Actual Plan**:
+
+  * Actually finds 50,000 rows in London.
+  * Nested Loop now sucks → huge CPU usage.
+  * You realize you need an index on `Customers.City`.
+
+👉 The mismatch between **Estimated Rows vs. Actual Rows** is a smoking gun for **stale stats or bad optimizer choices**.
+
+---
+
+## 5️⃣ Who does what?
+
+* **Estimated Plan = SQL Server’s “best guess”** before execution.
+* **Actual Plan = Reality check** after execution.
+
+---
+
+⚡ TL;DR:
+
+* Use **Estimated Plan** when you want a **risk-free preview**.
+* Use **Actual Plan** when you want the **real picture with runtime truth**.
