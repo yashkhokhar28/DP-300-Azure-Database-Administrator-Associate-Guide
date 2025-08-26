@@ -115,4 +115,114 @@
 * **Service Endpoint** → Use when you want to restrict access by VNet/subnet but can still tolerate public endpoint.
 * **Private Link** → Use when you must kill public endpoints and route through private IP only.
 
+---
+
+# 📘 Query Store Cheat Sheet (Azure SQL Database)
+
+---
+
+## 🔹 1. What Query Store Does
+
+* Captures query **execution plans** and **runtime stats** over time.
+* Helps analyze **performance regressions**, **plan changes**, and **slow queries**.
+* Persists across restarts (unlike DMVs).
+
+---
+
+## 🔹 2. Query Store States
+
+* **Read-Write** → Normal, captures data.
+* **Read-Only** → Captures stop, you can still query history.
+* **Off** → Disabled.
+
+### Why Query Store goes **Read-Only**
+
+1. Database runs out of space for Query Store.
+2. Data flushes from memory to disk take too long.
+3. IO or resource pressure.
+
+👉 **Fix:** Adjust flush interval, increase database size, or clean old data.
+
+---
+
+## 🔹 3. Key Configuration Settings
+
+* **Operation Mode**:
+
+  * Off / Read-Only / Read-Write
+* **Data Flush Interval** (default: 15 min):
+
+  * How often in-memory stats get written to disk.
+  * 🏆 *Reduce this to prevent read-only transitions.*
+* **Statistics Collection Interval** (default: 1 hr):
+
+  * Controls aggregation of runtime stats, not related to read-only.
+* **Max Size (MB)**:
+
+  * Cap for Query Store data. If reached → goes Read-Only.
+* **Stale Query Threshold (days)**:
+
+  * Auto-cleanup of old query data.
+
+---
+
+## 🔹 4. Monitoring Query Store
+
+* **DMVs**:
+
+  * `sys.database_query_store_options` → Current settings.
+  * `sys.query_store_runtime_stats` → Runtime stats.
+  * `sys.query_store_plan` → Plans captured.
+  * `sys.query_store_query_text` → Query text.
+
+* **Query Performance Insight (QPI)** in Azure Portal:
+
+  * High CPU, IO-heavy queries, regressed queries.
+
+* **Extended Events / DMVs** → Deep diagnostics.
+
+---
+
+## 🔹 5. Query Store Use Cases in Exams
+
+1. **Identify if tempdb is a bottleneck** → Use **DMVs**.
+2. **Identify top resource-consuming queries** → Use **Query Performance Insight**.
+3. **Prevent Query Store going Read-Only** → Decrease **Data Flush Interval**.
+4. **Capture query regressions** → Use **Query Store forced plan**.
+5. **Turn on Query Store** → `ALTER DATABASE SET QUERY_STORE = ON`.
+
+---
+
+## 🔹 6. Best Practices
+
+* Keep **flush interval low** (5–10 min) for high workload DBs.
+* Set **Max Size (MB)** high enough for workload.
+* Use **cleanup policies** to purge old/stale queries.
+* Use **forced plans** carefully (good for regressions, risky for evolving workloads).
+
+---
+
+## 🔹 7. Example Questions & Traps
+
+**Q: Query Store keeps going read-only due to disk pressure. What do you do?**
+
+* Increase DB size or set cleanup policies.
+
+**Q: You need to track query regressions after patching. What feature?**
+
+* Query Store forced plans.
+
+**Q: How to detect top queries consuming CPU?**
+
+* Query Performance Insight.
+
+**Q: Which interval affects Query Store write pressure?**
+
+* Data Flush Interval (NOT Statistics Interval).
+
+---
+
+🔥 With this, if you see *"Query Store + read-only + interval"* → Always **Data Flush Interval**.
+If you see *"Identify top queries"* → **QPI (Query Performance Insight)**.
+If you see *"Deep troubleshooting"* → **DMVs**.
 
