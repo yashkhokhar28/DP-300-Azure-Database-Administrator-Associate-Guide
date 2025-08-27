@@ -387,7 +387,39 @@ Think of it as a **ladder of protection & cost**:
 * **GRS** → "Cross-region copy, but locked" → DR ready, but passive.
 * **RA-GRS** → "Cross-region + unlocked" → DR ready, usable instantly.
 
+* **Jan 4, 2020 → 6 weeks**
+* **Jan 11, 2020 → 12 months**
 
+**Why:** In Azure SQL LTR, the **monthly** backup is the one from the **first full week of the month**. Jan 5–11, 2020 is the first full week of January, so the Jan 11 backup is promoted to monthly retention. Jan 4 sits in a partial week that started in December, so it stays a plain weekly snapshot. No 10-year (yearly) trigger here.
+
+### 🔎 Key Concepts
+
+1. **Automatic Tuning** in SQL Server requires **Query Store** to be enabled.
+
+   * Query Store must be set to **READ\_WRITE** mode.
+2. Then you can enable **automatic tuning** (`SET AUTOMATIC_TUNING = AUTO`).
+
+---
+
+### ✅ Correct T-SQL Statements
+
+```sql
+ALTER DATABASE [Db1] 
+SET QUERY_STORE = ON;
+
+ALTER DATABASE [Db1] 
+SET QUERY_STORE (OPERATION_MODE = READ_WRITE);
+
+ALTER DATABASE [Db1] 
+SET AUTOMATIC_TUNING = AUTO;
+```
+
+⚡ Exam Tip:
+If you see “enable automatic tuning,” always think:
+
+1. Query Store → ON
+2. Query Store → READ\_WRITE
+3. Automatic Tuning → AUTO
 
 
 
