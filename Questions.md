@@ -868,3 +868,22 @@ Great question 👍 Let’s break it down clearly:
 * So → **Storage Pool → Simple Layout → Volume** is correct.
 
 ---
+
+
+Correct ✅
+
+The answer is: **B. Decrease by half the value of Data Flush Interval**
+
+### Explanation:
+
+* Query Store collects query performance data in memory first, then periodically flushes it to disk (the database).
+* If the **Data Flush Interval** is too long, Query Store can accumulate too much data in memory. If SQL Server runs out of space for Query Store, it can transition into **read-only mode** to prevent further growth.
+* By **decreasing the Data Flush Interval**, data is written to disk more frequently, reducing memory pressure and minimizing the risk of Query Store becoming read-only.
+
+Other options:
+
+* **A. Double Data Flush Interval** → Increases risk (keeps more data in memory).
+* **C & D. Statistics Collection Interval** → Controls how often runtime statistics are aggregated, not related to Query Store read-only transitions.
+
+👉 So the best solution is **B**.
+
