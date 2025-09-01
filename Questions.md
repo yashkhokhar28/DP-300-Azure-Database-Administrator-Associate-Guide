@@ -1028,3 +1028,61 @@ Great question 👍 Let’s break down why the **other options** are not correct
 
 ---
 
+Great question 👍 Let’s break down when each option (distribution + index) can be used:
+
+---
+
+### **Distribution types**
+
+1. **Hash**
+   ✅ Best for: **Fact tables** (large tables, high number of rows).
+
+   * Use when you can choose a **high-cardinality column** as the distribution key (like CustomerID, OrderID).
+   * Optimizes joins and aggregations.
+
+2. **Round robin**
+   ✅ Best for: **Staging tables** or when no good distribution key exists.
+
+   * Data is evenly distributed, but not based on a column → can lead to more data movement during joins.
+   * Example: Landing raw data before transformations.
+
+3. **Replicated**
+   ✅ Best for: **Small dimension tables** (usually < 2 GB compressed).
+
+   * A full copy of the table is stored on every compute node.
+   * Eliminates data movement in joins between fact and dimension tables.
+   * Example: Date dimension, Country lookup.
+
+---
+
+### **Index types**
+
+1. **Clustered columnstore index (CCI)**
+   ✅ Best for: **Fact tables in analytics/OLAP**.
+
+   * Provides high compression + very fast scans for aggregates.
+   * Default for large fact tables in Synapse.
+
+2. **Clustered index**
+   ✅ Best for: **Small tables or OLTP-like workloads**.
+
+   * If you need fast point lookups (e.g., get 1 record by key).
+   * Sometimes used on small dimension tables instead of CCI (to avoid compression overhead).
+
+3. **Nonclustered index**
+   ✅ Best for: **Improving specific query patterns**.
+
+   * Example: When you need to optimize filtering on a few columns.
+   * Usually applied on top of CCI for targeted queries (but use sparingly to avoid load overhead).
+
+---
+
+✅ **Summary rule of thumb:**
+
+* **Fact tables (big, >1M rows):** Hash + CCI.
+* **Small dimension tables (<2GB):** Replicated + Clustered or CCI.
+* **Staging tables:** Round robin + Clustered index.
+* **Special queries:** Add Nonclustered index as needed.
+
+---
+
