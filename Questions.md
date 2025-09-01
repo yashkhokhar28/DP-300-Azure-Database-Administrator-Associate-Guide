@@ -98,3 +98,35 @@ Since the requirement says:
 👉 Correct Answer:
 **B. append**
 
+Let’s carefully check the requirements:
+
+* Databases are currently on **SQL Server 2019 (SQL1)**.
+* Must be able to **communicate with SQL2 (on-premises)** using **linked server connections**.
+* Must **minimize administrative effort**.
+
+---
+
+### Options:
+
+**A. Azure SQL Database** ❌
+
+* PaaS service, but it does **not support linked servers**.
+
+**B. Azure SQL Database elastic pool** ❌
+
+* Same limitations as single Azure SQL DB. No linked servers.
+
+**C. SQL Server on Azure Virtual Machines** ✅ (supports linked servers, since it’s full SQL Server).
+
+* But → requires **high administrative effort** (patching, backups, HA, etc.).
+
+**D. Azure SQL Managed Instance** ✅
+
+* PaaS service with **near 100% SQL Server compatibility**.
+* **Supports linked servers** (to on-premises SQL, via private endpoint / VPN / ExpressRoute).
+* **Minimizes administrative effort** compared to running SQL on VMs.
+
+---
+
+👉 Correct Answer:
+**D. Azure SQL Managed Instance**
