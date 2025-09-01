@@ -944,5 +944,28 @@ For **triggering an Azure Data Factory pipeline when a file arrives in Azure Dat
 
 **Final Answer: B. Microsoft.EventGrid** ✔️
 
+Great question — this comes up a lot in Synapse design ✅
+
+You’re creating a **dimension table** in a **dedicated SQL pool** and need a **surrogate key** with **fast query performance**.
+
+Let’s analyze:
+
+* **A. an IDENTITY column**
+
+  * Common in OLTP systems (SQL Server).
+  * But in Synapse dedicated SQL pool, `IDENTITY` values are generated per distribution, which can lead to **duplicate values across distributions** unless carefully managed. Not the best for scalability or performance in MPP (Massively Parallel Processing).
+
+* **B. a GUID column**
+
+  * Globally unique, but **large (16 bytes)** and not sequential.
+  * Leads to fragmentation and **slower query performance**. Bad choice for surrogate keys in Synapse.
+
+* **C. a sequence object**
+
+  * ✅ Recommended in Synapse.
+  * Centralized and generates unique values across distributions.
+  * Provides **scalable, fast, and sequential surrogate keys** — avoids the pitfalls of `IDENTITY`.
+
+📌 **Correct Answer: C. a sequence object**
 
 
