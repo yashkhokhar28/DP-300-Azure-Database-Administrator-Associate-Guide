@@ -276,4 +276,77 @@ We want an **alert on CPU usage** for **all Azure SQL databases** on the same se
 👉 Correct Answer:
 **B. SQL Servers**
 
+We need **voice notifications** when **maintenance events affect any of the 10 regions** where our **Azure SQL Managed Instances** run.
+
+---
+
+### Options:
+
+**A. From the Azure portal, create a service health alert** ✅
+
+* Service health alerts notify you about **issues in Azure services or regions** (including planned maintenance).
+* Can deliver alerts via **email, SMS, or voice call**.
+* Configured **once per subscription/region**, so this minimizes administrative effort across all managed instances.
+
+**B. Create an Azure Advisor operational excellence alert** ❌
+
+* Advisor gives best-practice recommendations (cost, performance, security), not service health/maintenance events.
+
+**C. Configure a SQL Server Agent job in SSMS** ❌
+
+* Local to a single managed instance, doesn’t integrate with Azure-wide maintenance event notifications.
+
+**D. Configure an activity log alert** ❌
+
+* Activity log captures events **within your subscription resources** (e.g., resource modifications), not **service health events at the regional level**.
+
+---
+
+👉 Correct Answer:
+**A. From the Azure portal, create a service health alert**
+
+
+Let’s analyze this step by step:
+
+### Requirements:
+
+1. **Failovers that do not require client applications to change their connection strings**
+   → This rules out **geo-replication**, because geo-replication requires **manual connection string changes** during failover.
+
+2. **Replicate the database to a secondary Azure region**
+   → This means cross-region support is needed (not just Availability Zones, which are within the same region).
+
+3. **Support failover to the secondary region**
+   → Must support **automatic or manual failover across regions**.
+
+---
+
+### Options:
+
+* **A. Failover groups** ✅
+
+  * Provides **automatic failover** between **primary and secondary servers** across regions.
+  * Applications can connect using a **listener endpoint**, so no connection string changes are required.
+  * Meets all requirements.
+
+* **B. Transactional replication** ❌
+
+  * Mainly for replication, not high availability or transparent failover.
+  * Requires connection changes and doesn’t provide auto-failover.
+
+* **C. Availability Zones** ❌
+
+  * Increases availability within the **same region**, not across regions.
+  * Does not meet the replication-to-secondary-region requirement.
+
+* **D. Geo-replication** ❌
+
+  * Provides readable secondary, but **failover requires manual reconfiguration** of connection strings.
+  * Doesn’t meet the requirement.
+
+---
+
+✅ **Correct Answer: A. failover groups**
+
+
 
