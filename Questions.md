@@ -1086,3 +1086,56 @@ Great question 👍 Let’s break down when each option (distribution + index) c
 
 ---
 
+Let’s break this one down carefully:
+
+---
+
+### ✅ Requirements:
+
+* **App1 authenticates with SQL authentication** → means username/password inside DB, not Azure AD or Windows login.
+* **App1 must only view DB2** → should not see DB1.
+* **Minimal administrative effort** → simplest, direct solution.
+
+---
+
+### 🔎 Options:
+
+**A. a contained database user for App1 on DB2**
+
+* A contained database user is **created inside the database only** (DB2).
+* It doesn’t require a server-level login on `Server1`.
+* This means App1 only sees **DB2** and not DB1.
+* ✅ This meets **all requirements**.
+
+---
+
+**B. a login for App1 on Server1**
+
+* A server-level login would exist at `Server1`.
+* By default, it has visibility to the server and could be mapped to both DB1 and DB2.
+* ❌ More admin overhead, doesn’t restrict visibility to DB2 only without extra steps.
+
+---
+
+**C. a contained database user from an external provider for App1 on DB2**
+
+* "External provider" = Azure AD authentication.
+* ❌ Doesn’t apply here since App1 is using **SQL authentication**, not Azure AD.
+
+---
+
+**D. a contained database user from a Windows login for App1 on DB2**
+
+* This is Windows authentication.
+* ❌ Not valid, since App1 must authenticate via **SQL authentication**.
+
+---
+
+### ✅ Correct Answer:
+
+**A. a contained database user for App1 on DB2**
+
+---
+
+
+
