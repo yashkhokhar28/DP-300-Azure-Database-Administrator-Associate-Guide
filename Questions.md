@@ -37,4 +37,37 @@ PARTITION (OrderDateKey RANGE RIGHT FOR VALUES
 * **ROUND\_ROBIN**
 * **OrderDateKey**
 
+Let’s break it down:
+
+* The issue: **tempDB contention** identified by **Intelligent Insights** in an **Azure SQL Database**.
+* Goal: reduce **contention on tempDB**.
+
+---
+
+### Options analysis:
+
+**A. Implement memory-optimized tables** ✅
+
+* Memory-optimized tables reduce or eliminate tempDB usage (since no need for tempDB for row versioning or intermediate storage).
+* This directly helps reduce tempDB contention.
+* Supported in Azure SQL Database.
+
+**B. Run `DBCC FLUSHPROCINDB`** ❌
+
+* Clears cached execution plans for a database.
+* Doesn’t address tempDB contention at all.
+
+**C. Replace sequential index keys with nonsequential keys** ❌
+
+* This helps reduce latch contention on **indexes** (hotspot issue with identity keys), not **tempDB contention**.
+
+**D. Run `DBCC DBREINDEX`** ❌
+
+* Deprecated command to rebuild indexes (replaced by `ALTER INDEX`).
+* Has nothing to do with tempDB contention.
+
+---
+
+👉 Correct Answer:
+**A. Implement memory-optimized tables**
 
