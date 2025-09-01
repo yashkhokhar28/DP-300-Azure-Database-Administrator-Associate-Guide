@@ -169,3 +169,37 @@ The extract includes **dimensions (descriptive attributes)** and **facts (measur
 * **TotalEvents → FactEvents**
 
 
+Let’s analyze this step by step:
+
+* **Scenario:**
+
+  * Azure Synapse Analytics (DW1) with **automated data loads**.
+  * At the same time, **users run ad-hoc queries**.
+  * Requirement: **ensure automated loads have enough memory to finish quickly** despite concurrency.
+
+---
+
+### Options:
+
+**A. Assign a smaller resource class to the automated data load queries** ❌
+
+* Smaller resource class = less memory → opposite of what’s needed.
+
+**B. Create sampled statistics to every column** ❌
+
+* Statistics improve query plans but do not guarantee memory availability for loads.
+
+**C. Assign a larger resource class to the automated data load queries** ✅
+
+* Resource classes in Synapse determine how much memory is allocated to a query.
+* Larger resource class = more memory → better for **data load performance**.
+
+**D. Hash distribute the large fact tables before performing the automated data loads** ❌
+
+* Hash distribution helps query performance and reduces data movement, but it does **not** solve the memory availability issue for the loading process.
+
+---
+
+👉 Correct Answer:
+**C. Assign a larger resource class to the automated data load queries.**
+
