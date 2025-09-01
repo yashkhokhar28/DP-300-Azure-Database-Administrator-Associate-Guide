@@ -533,4 +533,58 @@ We need anomaly detection for **streaming IoT hub data** with **minimum developm
 
 ---
 
+Great one 👇 This is about ensuring your **Azure Stream Analytics job has enough Streaming Units (SUs)** provisioned.
+
+---
+
+### **Key Metric: SU % Utilization**
+
+* This shows how much of your allocated Streaming Unit capacity is being used.
+* If it's close to 100%, you may need to scale up.
+
+But monitoring SU utilization alone is not enough. You need to check if the job is keeping up with the input data stream.
+
+---
+
+### **Options Analysis**
+
+**A. Late Input Events**
+
+* These occur when events arrive later than the configured *late arrival tolerance*.
+* They’re about data quality, not SU capacity.
+  ❌
+
+**B. Out of order Events**
+
+* These are events that arrive out of sequence.
+* Also about event ordering, not about whether SUs are sufficient.
+  ❌
+
+**C. Backlogged Input Events**
+
+* Very important.
+* Shows how many input events the job has received but not yet processed.
+* If backlog grows → SUs are insufficient.
+  ✅
+
+**D. Watermark Delay**
+
+* Indicates how far the system is behind in processing events, measured in time.
+* If watermark delay is increasing → job is under-provisioned.
+  ✅
+
+**E. Function Events**
+
+* Refers to events sent to Azure Functions (custom processing).
+* Not relevant to SU sizing.
+  ❌
+
+---
+
+### ✅ Correct Answers:
+
+**C. Backlogged Input Events**
+**D. Watermark Delay**
+
+---
 
