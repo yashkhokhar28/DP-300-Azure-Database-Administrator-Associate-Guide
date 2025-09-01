@@ -931,3 +931,18 @@ Perfect ✅ let’s break this down step by step using the policy in the screens
 ---
 
 👉 So the reason **Jan 4, 2020** is **not** a monthly backup is simply because the **monthly rule is configured for Week 2**, not Week 1.
+
+
+You got it 👍
+
+For **triggering an Azure Data Factory pipeline when a file arrives in Azure Data Lake Storage Gen2**, the correct service is **Event Grid**.
+
+* **Microsoft.EventHub** → Used for streaming large volumes of events (real-time ingestion).
+* **Microsoft.Sql** → SQL resource provider (not relevant to file triggers).
+* **Microsoft.Automation** → Used for automation runbooks, not event-driven triggers.
+* ✅ **Microsoft.EventGrid** → Correct. Event Grid integrates with **ADLS Gen2** and can raise an event when a new file is created, which can then trigger the **ADF pipeline**.
+
+**Final Answer: B. Microsoft.EventGrid** ✔️
+
+
+
