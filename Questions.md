@@ -349,4 +349,52 @@ Let’s analyze this step by step:
 ✅ **Correct Answer: A. failover groups**
 
 
+Great question 👍 Let’s break it down.
+
+You want to see **the parameter values from the last time a query was executed** on **SQL Server running in an Azure VM**.
+
+---
+
+### 🔎 Key SQL Server features involved:
+
+1. **Lightweight Query Profiling**
+
+   * Introduced to reduce overhead of query profiling.
+   * Enables capturing runtime execution stats (e.g., row counts, operator performance).
+   * Needed for getting **execution stats** in DMVs.
+
+2. **Last\_Query\_Plan\_Stats** (Database Scoped Configuration)
+
+   * Allows you to access the **last actual execution plan** for a query (not just the estimated plan).
+   * Includes **runtime parameter values** from the last execution.
+
+3. **PARAMETER\_SNIFFING**
+
+   * Controls whether SQL Server caches query plans based on the first set of parameters.
+   * Not related to retrieving parameter values from the last query.
+
+---
+
+### ✅ Correct Answers:
+
+* **B. Enable Lightweight\_Query\_Profiling in DB1**
+  (Needed to collect query profiling info with minimal overhead.)
+
+* **C. Enable Last\_Query\_Plan\_Stats in DB1**
+  (Lets you retrieve the last actual execution plan, including parameter values.)
+
+---
+
+### ❌ Incorrect options:
+
+* **A & D (Enable in master)** → Wrong scope. These are **database scoped configurations**, not set at master.
+* **E (Enable PARAMETER\_SNIFFING)** → Controls plan caching, not parameter value retrieval.
+
+---
+
+✅ Final Answer:
+**B. Enable Lightweight\_Query\_Profiling in DB1**
+**C. Enable Last\_Query\_Plan\_Stats in DB1**
+
+---
 
