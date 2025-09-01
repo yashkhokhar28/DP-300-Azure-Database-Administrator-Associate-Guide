@@ -1196,3 +1196,8 @@ Great, let’s work through this one step by step 👇
 
 ---
 
+**Recommendation (Synapse dedicated SQL pool table distribution types):**
+
+* **Retail store data:** **Replicated** (small dimension/reference table → replicate to all distributions to avoid data movement on joins).
+* **Promotional data:** **Hash** (larger table joined to fact data → hash-distribute on the join key to improve parallel joins).
+
