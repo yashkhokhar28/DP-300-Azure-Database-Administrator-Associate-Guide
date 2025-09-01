@@ -887,3 +887,47 @@ Other options:
 
 👉 So the best solution is **B**.
 
+Perfect ✅ let’s break this down step by step using the policy in the screenshot.
+
+### **Retention Policy in Screenshot**
+
+* **Weekly LTR Backups** → Retained for **6 weeks**.
+* **Monthly LTR Backups** → Retained for **12 months** (the **Week 2 backup** of each month).
+* **Yearly LTR Backups** → Retained for **10 years** (the **Week 2 backup of January** each year).
+
+---
+
+### **Example: January 2020**
+
+1. **Jan 4, 2020** → Week 1 of Jan
+
+   * Stored as **weekly backup**.
+   * Retained **6 weeks** only.
+   * ❌ Not monthly, because policy says Week 2.
+
+2. **Jan 11, 2020** → Week 2 of Jan
+
+   * Stored as **weekly backup** → retained **6 weeks**.
+   * ✅ Promoted to **monthly backup** → retained **12 months**.
+   * ✅ Also promoted to **yearly backup** (since it’s the Week 2 backup of January) → retained **10 years**.
+
+---
+
+### **February 2020**
+
+* **Feb 1, 2020** → Week 1 → weekly only → 6 weeks.
+* **Feb 8, 2020** → Week 2 → weekly + promoted to monthly → retained **12 months**.
+
+(no yearly in February, only January provides yearly).
+
+---
+
+### **Summary**
+
+* **Weekly backups**: Every week, kept **6 weeks**.
+* **Monthly backups**: The **Week 2 backup** of each month, kept **12 months**.
+* **Yearly backups**: The **Week 2 backup of January**, kept **10 years**.
+
+---
+
+👉 So the reason **Jan 4, 2020** is **not** a monthly backup is simply because the **monthly rule is configured for Week 2**, not Week 1.
