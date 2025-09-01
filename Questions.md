@@ -640,4 +640,68 @@ To make **performance monitoring data available ASAP**, you must:
 
 ---
 
+This screenshot is showing a **RESTORE DATABASE** command in SQL Server with options for how the database should behave after the restore.
+
+Here’s a breakdown of the options you see:
+
+---
+
+### Command structure:
+
+```sql
+RESTORE DATABASE MyDB1
+FROM DISK = 'D:\DB1.bak'
+WITH { option }
+GO
+```
+
+---
+
+### Options:
+
+1. **NORECOVERY**
+
+   * Leaves the database **non-operational**.
+   * Used when you plan to apply **additional transaction log backups**.
+   * Keeps the database in a "restoring" state.
+   * Example:
+
+     ```sql
+     RESTORE DATABASE MyDB1 
+     FROM DISK = 'D:\DB1.bak' 
+     WITH NORECOVERY;
+     ```
+
+2. **RECOVERY**
+
+   * Makes the database **operational** immediately after the restore.
+   * You cannot restore more backups after this.
+   * Example:
+
+     ```sql
+     RESTORE DATABASE MyDB1 
+     FROM DISK = 'D:\DB1.bak' 
+     WITH RECOVERY;
+     ```
+
+3. **STANDBY**
+
+   * Makes the database **read-only** after restore.
+   * Useful for log shipping (secondary database is readable while waiting for the next log restore).
+   * Example:
+
+     ```sql
+     RESTORE DATABASE MyDB1 
+     FROM DISK = 'D:\DB1.bak' 
+     WITH STANDBY = 'D:\UNDO\DB1.undo';
+     ```
+
+---
+
+✅ **In short:**
+
+* Use **NORECOVERY** if more restores are coming (like log backups).
+* Use **RECOVERY** if this is the final restore and you want the DB online.
+* Use **STANDBY** if you want a read-only copy (common in log shipping).
+
 
