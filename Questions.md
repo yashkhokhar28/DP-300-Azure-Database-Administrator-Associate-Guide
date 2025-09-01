@@ -1138,4 +1138,23 @@ Let’s break this one down carefully:
 ---
 
 
+Perfect, let’s analyze this one 👇
+
+The query execution plan shows a **Key Lookup (Clustered)** operator.
+
+### Breakdown:
+
+* **Key Lookup** happens when SQL Server finds a row in a **nonclustered index**, but needs more columns not present in the index, so it goes back to the **clustered index (or heap)** to fetch them.
+* This causes extra I/O and slows performance.
+* The fix is to add those missing columns into the **nonclustered index** as **INCLUDE columns**, so SQL Server doesn’t need to do the lookup.
+
+### Correct Answer:
+
+* **The performance issue stems from the:** 👉 **Key Lookup** operator
+* **The performance issue can be resolved by adding include columns to the:** 👉 **nonclustered index**
+
+✅ Final Answer:
+
+* **Key Lookup**
+* **nonclustered index**
 
