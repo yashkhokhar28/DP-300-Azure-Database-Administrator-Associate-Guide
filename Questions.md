@@ -588,3 +588,56 @@ But monitoring SU utilization alone is not enough. You need to check if the job 
 
 ---
 
+Perfect, let’s carefully solve this one 👇
+
+---
+
+### **Question Recap**
+
+* DB: **Azure SQL database (db1)**
+* Monitoring tool: **Query Performance Insight (QPI)** → relies on **Query Store**.
+* Requirement: **Performance monitoring data must be available as soon as possible**.
+* Task: Choose **configuration setting** and **value**.
+
+---
+
+### **Understanding Query Store Configurations**
+
+1. **DATA\_FLUSH\_INTERVAL\_SECONDS**
+
+   * Controls how often collected data is written (“flushed”) from memory to disk.
+   * **Default = 900s (15 min)**.
+   * Lowering this value (e.g., 60s or 1s) makes data available faster in QPI.
+
+2. **INTERVAL\_LENGTH\_MINUTES**
+
+   * Defines time granularity of data aggregation (default = 60 min).
+   * Smaller intervals (e.g., 1 min) improve granularity but don’t directly affect how soon data is available.
+
+3. **MAX\_PLANS\_PER\_QUERY**
+
+   * Controls how many execution plans are stored → irrelevant for timeliness.
+
+4. **QUERY\_CAPTURE\_MODE**
+
+   * Controls which queries are captured (ALL, AUTO, CUSTOM).
+   * Impacts **what is captured**, not **when it is available**.
+
+---
+
+### **Correct Answer**
+
+To make **performance monitoring data available ASAP**, you must:
+
+* Configure **DATA\_FLUSH\_INTERVAL\_SECONDS**
+* Set to **1 (second)**
+
+---
+
+✅ **Final Answer:**
+**Configuration setting:** `DATA_FLUSH_INTERVAL_SECONDS`
+**Value:** `1`
+
+---
+
+
