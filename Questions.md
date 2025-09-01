@@ -203,3 +203,51 @@ Let’s analyze this step by step:
 👉 Correct Answer:
 **C. Assign a larger resource class to the automated data load queries.**
 
+
+We need to encrypt **Azure Data Factory v2 (DF1)** using a **customer-managed key (CMK)** from **Azure Key Vault (vault1)**.
+
+---
+
+### Important facts:
+
+* To use **CMK encryption** with ADF, the **Key Vault** must have:
+
+  * **Soft-delete enabled**
+  * **Purge protection enabled**
+
+This is a **hard requirement** from Azure because ADF must be able to recover the key if accidentally deleted.
+
+---
+
+### Options:
+
+**A. Disable purge protection on vault1** ❌
+
+* Wrong, purge protection must be **enabled**, not disabled.
+
+**B. Remove the linked service from df1** ❌
+
+* Not required before enabling CMK encryption.
+
+**C. Create a self-hosted integration runtime** ❌
+
+* Not related to encryption with CMK.
+
+**D. Disable soft delete on vault1** ❌
+
+* Wrong, **soft delete must be enabled**, not disabled.
+
+---
+
+👉 The correct first step is actually the **opposite** of A and D:
+You must **enable soft-delete and purge protection** on the Key Vault.
+
+Since none of the listed answers say **enable**, and the trick options are about disabling them, the correct interpretation is:
+
+✅ **None of these disabling actions are correct. The required step is to ENABLE soft-delete and purge protection on vault1.**
+
+---
+
+
+
+
