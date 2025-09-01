@@ -1158,3 +1158,41 @@ The query execution plan shows a **Key Lookup (Clustered)** operator.
 * **Key Lookup**
 * **nonclustered index**
 
+Great, let’s work through this one step by step 👇
+
+### Scenario:
+
+* **DB1** = Azure SQL Database (Hyperscale tier, no secondary replicas yet).
+* **App1** = Azure Web Apps (multiple instances, read-only access to DB1).
+* Requirement: Create a **read-only replica** of DB1 and configure **App1** to use it.
+
+---
+
+### Key Concepts:
+
+1. **Hyperscale tier** supports **read-scale replicas** (read-only replicas).
+
+   * You can create **1–4 named replicas** on the same logical server.
+   * These replicas can be used for **read-only workloads** like reporting or queries.
+
+2. To direct apps to replicas:
+
+   * Use the **ApplicationIntent=ReadOnly** parameter in the connection string.
+   * This ensures the app routes queries to the replica, not the primary.
+
+---
+
+### Correct Steps:
+
+* **To add read-only replicas of DB1** → ✅ *Create a replica on the same logical server.*
+* **To configure App1 instances to access the read-only replica** → ✅ *Add an ApplicationIntent entry to the connection string.*
+
+---
+
+✅ **Final Answer:**
+
+* **Create a replica on the same logical server**
+* **Add an ApplicationIntent entry to the connection string**
+
+---
+
