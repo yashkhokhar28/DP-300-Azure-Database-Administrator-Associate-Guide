@@ -398,3 +398,50 @@ You want to see **the parameter values from the last time a query was executed**
 
 ---
 
+
+Alright, let’s carefully analyze this one ✅
+
+---
+
+### Requirements:
+
+1. **Support user-initiated backups**
+
+   * Needed for flexibility (restore when you want, not only automated retention).
+   * ✅ Available in **SQL Server on Azure VM** (IaaS) → you control SQL Server Agent jobs, backups to Blob Storage, etc.
+   * ❌ Azure SQL Database / Managed Instance → backups are automated by Azure (you can restore but not *initiate* backups directly).
+
+2. **Support multiple automatically replicated instances across Azure regions**
+
+   * Means geo-redundancy / high availability.
+
+3. **Minimize administrative effort**
+
+   * Rules out heavy management like Always On AG setup in SQL VMs.
+
+---
+
+### Deployment Option:
+
+👉 **SQL Server on Azure Virtual Machines**
+
+* Because only in IaaS SQL VM can you run **user-initiated backups**.
+* PaaS (Azure SQL Database / Managed Instance) = automatic backups only, no user-initiated.
+
+---
+
+### Resiliency Option:
+
+👉 **Auto-failover group**
+
+* Provides **automatic replication across regions** + automatic failover with **no connection string change**.
+* Active geo-replication = database-level only (manual failover).
+* Zone-redundant deployment = only within the same region, not across regions.
+
+---
+
+### ✅ Correct Answer:
+
+* **Deployment option**: **SQL Server on Azure Virtual Machines**
+* **Resiliency option**: **Auto-failover group**
+
