@@ -704,4 +704,47 @@ GO
 * Use **RECOVERY** if this is the final restore and you want the DB online.
 * Use **STANDBY** if you want a read-only copy (common in log shipping).
 
+Let’s analyze this step by step:
+
+---
+
+### Key point in the question:
+
+* Customers need to be able to **create database objects**.
+* The solution must meet **business goals** → usually means **isolation** between customers, avoiding conflicts.
+
+---
+
+### Roles:
+
+* **`ddl_admin`**: Allows a user to run **Data Definition Language (DDL)** commands such as `CREATE`, `ALTER`, `DROP`.
+* **`db_writer`**: Only allows `INSERT`, `UPDATE`, `DELETE` data → **cannot create schema objects**.
+
+---
+
+### Options:
+
+**A. Grant `ddl_admin` on existing schema**
+
+* Problem: All customers share the same schema → conflicts, no isolation. ❌
+
+**B. Create additional schema per customer and grant `ddl_admin`**
+
+* ✅ Best option.
+* Each customer gets their own schema, and `ddl_admin` on that schema allows them to create their own tables, procedures, etc.
+* Prevents conflicts, aligns with multi-tenant isolation.
+
+**C. Create additional schema and grant `db_writer`**
+
+* ❌ `db_writer` only allows DML, not schema changes.
+
+**D. Grant `db_writer` on existing schema**
+
+* ❌ Same as above, plus shared schema (bad for isolation).
+
+---
+
+✅ **Correct Answer: B. For each customer, create an additional schema and grant the customer ddl\_admin to the new schema.**
+
+---
 
