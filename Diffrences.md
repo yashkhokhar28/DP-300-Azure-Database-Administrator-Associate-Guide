@@ -422,4 +422,102 @@ If you see “enable automatic tuning,” always think:
 3. Automatic Tuning → AUTO
 
 
+Got it ✅ — you want a **comparison of IaaS vs PaaS options for high availability (HA) and disaster recovery (DR) in Azure SQL**. Let’s break it down by **service model** (IaaS = SQL Server in VMs, PaaS = Azure SQL Database / Managed Instance) and the available **options**.
+
+---
+
+# 🔹 IaaS (SQL Server on Azure VMs)
+
+When you run **SQL Server on Azure VMs**, you manage everything (SQL Server + Windows). HA/DR options are similar to on-premises SQL.
+
+### High Availability (HA) within region:
+
+* **Always On Availability Groups (AGs)**
+
+  * Requires Windows Failover Cluster.
+  * Synchronous replication within the same region.
+  * Automatic failover supported.
+
+* **Failover Cluster Instance (FCI)**
+
+  * Shared storage required (Storage Spaces Direct).
+  * High availability within a region, automatic failover.
+
+* **Backup/Restore to Azure Blob**
+
+  * Basic DR, not HA. Manual restore needed.
+
+---
+
+### Disaster Recovery (cross-region):
+
+* **Always On Availability Groups (AGs)**
+
+  * Asynchronous replication to a remote VM in another region.
+  * Manual failover across regions.
+
+* **Log Shipping**
+
+  * Simple, manual DR option.
+  * No automatic failover.
+
+* **Backup/Restore to Secondary Region**
+
+  * Store backups in GRS storage, restore manually.
+
+---
+
+# 🔹 PaaS (Azure SQL Database / Managed Instance)
+
+With **PaaS**, Microsoft manages the OS, SQL patching, and built-in HA. You configure DR.
+
+### High Availability (HA) within region:
+
+* **Built-in HA (default)**
+
+  * Three replicas per database inside a region.
+  * Automatic failover (no config required).
+
+* **Zone Redundant Deployments**
+
+  * Deploy database across **Availability Zones** in the same region.
+  * Survives zone failures, transparent to applications.
+
+---
+
+### Disaster Recovery (cross-region):
+
+* **Active Geo-Replication**
+
+  * Up to 4 readable secondaries in other regions.
+  * Failover requires **manual connection string update**.
+
+* **Auto-failover Groups**
+
+  * Managed failover between primary and secondary region.
+  * Uses a **listener endpoint** (no connection string changes).
+  * Best for enterprise DR.
+
+---
+
+# 🔹 Comparison Table
+
+| Feature                     | IaaS (SQL in VMs)                        | PaaS (Azure SQL DB / MI)                     |
+| --------------------------- | ---------------------------------------- | -------------------------------------------- |
+| **HA within region**        | Always On AG, Failover Cluster Instance  | Built-in HA, Zone redundant deployment       |
+| **DR cross-region**         | AG async replicas, Log shipping, Backups | Active Geo-replication, Auto-failover groups |
+| **Automatic failover (HA)** | Yes (AG / FCI within region)             | Yes (built-in HA, zones)                     |
+| **Automatic failover (DR)** | No (manual for cross-region)             | Yes (auto-failover groups)                   |
+| **Readable secondaries**    | Yes (AG async replicas)                  | Yes (geo-replication, failover groups)       |
+| **Admin overhead**          | High (you patch/manage SQL + OS)         | Low (Microsoft manages platform)             |
+
+---
+
+✅ **Quick Rule for Exam**:
+
+* **IaaS** → Think **Always On / Failover Cluster / Log Shipping / Backups**.
+* **PaaS** → Think **Built-in HA / Zone Redundant / Geo-replication / Failover groups**.
+
+---
+
 
