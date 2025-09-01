@@ -249,5 +249,31 @@ Since none of the listed answers say **enable**, and the trick options are about
 ---
 
 
+We want an **alert on CPU usage** for **all Azure SQL databases** on the same server, including **future databases**.
+
+---
+
+### Options:
+
+**A. Resource Groups** ❌
+
+* Alerts at resource group scope don’t automatically track database-level metrics like CPU usage.
+
+**B. SQL Servers** ✅
+
+* If you set the alert on the **SQL Server resource**, it applies to all databases under that server, including **new ones created later**.
+
+**C. SQL Databases** ❌
+
+* Works only per individual database. Would require configuring alerts one by one and wouldn’t auto-apply to new databases.
+
+**D. SQL Virtual Machines** ❌
+
+* Not relevant here — we’re using **Azure SQL Database PaaS**, not SQL Server on VMs.
+
+---
+
+👉 Correct Answer:
+**B. SQL Servers**
 
 
