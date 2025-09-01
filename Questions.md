@@ -968,4 +968,63 @@ Let’s analyze:
 
 📌 **Correct Answer: C. a sequence object**
 
+Great question 👍 Let’s break down why the **other options** are not correct for this specific requirement and when you *would* use them:
+
+---
+
+### **Option A. Attach two mirrored 4-TB SSDs (RAID-1 / Mirroring)**
+
+* **Why not here?**
+
+  * Mirroring cuts usable capacity in half (4 TB usable from 8 TB raw).
+  * IOPS does **not scale** much compared to striping.
+  * Goal here is **maximum IOPS**, not redundancy.
+* **When to use:**
+
+  * If your main requirement is **high availability** or **redundancy**, e.g., protecting against a single disk failure.
+  * Not ideal for Azure Premium SSDs since Azure already provides redundancy at the infrastructure level.
+
+---
+
+### **Option C. Attach a RAID-5 array with five 1-TB SSDs**
+
+* **Why not here?**
+
+  * RAID-5 has **write penalties** (parity calculation) → not good for SQL Server workloads with high write activity.
+  * More complex setup and slower performance compared to striping (RAID-0).
+* **When to use:**
+
+  * Suitable when you want a **balance between capacity and redundancy** and workloads are **read-heavy** (but rarely used for SQL Server on Azure due to performance trade-offs).
+
+---
+
+### **Option D. Attach a single 4-TB SSD**
+
+* **Why not here?**
+
+  * A single disk’s IOPS and throughput are capped by Azure limits for that disk size.
+  * Even the largest Premium SSD can’t reach the IOPS you get by **striping multiple smaller SSDs**.
+* **When to use:**
+
+  * If your requirement is **simplicity** (easy to manage, one disk).
+  * If workload IOPS needs fit within the single-disk cap.
+
+---
+
+### ✅ **Correct Choice: Option B. Stripe set with four 1-TB SSDs (RAID-0 / Storage Spaces)**
+
+* Premium SSDs in Azure **scale IOPS linearly when striped**.
+* Striping provides the **highest throughput and IOPS**.
+* Perfect when the requirement is **performance** over redundancy.
+
+---
+
+⚖️ **Summary:**
+
+* Use **Striping (RAID-0)** → for maximum IOPS/throughput.
+* Use **Mirroring (RAID-1)** → for redundancy/high availability.
+* Use **RAID-5** → for capacity efficiency + some fault tolerance (but rarely in SQL Server Azure due to poor write performance).
+* Use **Single large SSD** → for simplicity when IOPS needs are moderate.
+
+---
 
