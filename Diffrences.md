@@ -422,10 +422,6 @@ If you see “enable automatic tuning,” always think:
 3. Automatic Tuning → AUTO
 
 
-Got it ✅ — you want a **comparison of IaaS vs PaaS options for high availability (HA) and disaster recovery (DR) in Azure SQL**. Let’s break it down by **service model** (IaaS = SQL Server in VMs, PaaS = Azure SQL Database / Managed Instance) and the available **options**.
-
----
-
 # 🔹 IaaS (SQL Server on Azure VMs)
 
 When you run **SQL Server on Azure VMs**, you manage everything (SQL Server + Windows). HA/DR options are similar to on-premises SQL.
@@ -520,4 +516,35 @@ With **PaaS**, Microsoft manages the OS, SQL patching, and built-in HA. You conf
 
 ---
 
+# 🔹 Backup and Replication Options Across Azure SQL Deployment Models
+
+| Feature                                     | **Azure SQL Database (Single / Elastic Pool)**                                   | **Azure SQL Managed Instance**                                               | **SQL Server on Azure VM**                                                  |
+| ------------------------------------------- | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Backup type**                             | Automated (full daily, differential every 12h, log every 5–10 min)               | Automated (same as SQL DB)                                                   | User-initiated (full, diff, log), or automated via SQL Agent / Azure Backup |
+| **User-initiated backups**                  | ❌ Not possible (restore only from automated backups or use **Copy-only bacpac**) | ❌ Not possible (restore only from automated backups or **Copy-only bacpac**) | ✅ Yes (full/diff/log backups using native SQL tools to storage)             |
+| **Retention (short-term)**                  | 7–35 days                                                                        | 7–35 days                                                                    | User-defined (depends on storage/backup strategy)                           |
+| **Long-term backup retention (LTR)**        | ✅ Supported (up to 10 years, weekly/monthly/yearly backups)                      | ✅ Supported (up to 10 years)                                                 | ✅ Supported (user-managed with Azure Backup or manual storage)              |
+| **High availability (in-region)**           | ✅ Built-in HA (3 replicas, no config needed)                                     | ✅ Built-in HA (Always On AG-like, managed by Azure)                          | ❌ Must configure Always On AG, Failover Cluster, or Log Shipping manually   |
+| **Zone redundancy (in-region)**             | ✅ Zone redundant HA (optional)                                                   | ✅ Zone redundant HA (optional)                                               | ❌ Manual setup required                                                     |
+| **Geo-replication (cross-region)**          | ✅ Active Geo-replication (up to 4 readable secondaries, manual failover)         | ✅ Auto-failover groups (MI level)                                            | ✅ Always On AG (manual), Log Shipping, Replication – full admin effort      |
+| **Auto-failover groups**                    | ✅ Yes (server-level, multiple DBs)                                               | ✅ Yes (instance-level, all DBs)                                              | ❌ Manual setup required                                                     |
+| **Client connection string after failover** | ✅ Stays the same with Auto-failover groups                                       | ✅ Stays the same with Auto-failover groups                                   | ❌ You must update connection string / DNS manually                          |
+| **Best for**                                | Low admin effort, SaaS apps, automatic HA & DR                                   | Lift & shift from on-prem SQL with minimal code changes, auto HA & DR        | Full SQL control, legacy apps needing SQL Agent, SSRS, CLR, custom backups  |
+
+---
+
+# 🔹 Key Takeaways:
+
+* **Azure SQL Database** and **Managed Instance** = **PaaS** → no user backups, automatic HA, minimal admin effort.
+* **SQL Server on Azure VM** = **IaaS** → full SQL control, user-initiated backups, but HA/DR must be set up manually (higher admin effort).
+* **Geo-replication / Auto-failover groups** in PaaS solutions make cross-region failover seamless (connection strings stay the same).
+
+---
+
+✅ For your exam question:
+
+* **SQL VM** = required because of **user-initiated backups**.
+* **Auto-failover group** = minimizes admin effort for geo-redundancy.
+
+---
 
