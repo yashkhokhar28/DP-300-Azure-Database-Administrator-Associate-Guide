@@ -588,9 +588,6 @@ But monitoring SU utilization alone is not enough. You need to check if the job 
 
 ---
 
-Perfect, let’s carefully solve this one 👇
-
----
 
 ### **Question Recap**
 
@@ -637,12 +634,6 @@ To make **performance monitoring data available ASAP**, you must:
 ✅ **Final Answer:**
 **Configuration setting:** `DATA_FLUSH_INTERVAL_SECONDS`
 **Value:** `1`
-
----
-
-This screenshot is showing a **RESTORE DATABASE** command in SQL Server with options for how the database should behave after the restore.
-
-Here’s a breakdown of the options you see:
 
 ---
 
@@ -704,9 +695,6 @@ GO
 * Use **RECOVERY** if this is the final restore and you want the DB online.
 * Use **STANDBY** if you want a read-only copy (common in log shipping).
 
-Let’s analyze this step by step:
-
----
 
 ### Key point in the question:
 
@@ -748,3 +736,42 @@ Let’s analyze this step by step:
 
 ---
 
+### Scenario:
+
+* You need to implement **security** for **ResearchDB1**.
+* Requirement → must meet **security and compliance**.
+* Clearly, this is about **Always Encrypted** with **Azure Key Vault** integration.
+
+---
+
+### Steps (in correct sequence):
+
+1. **Create an Azure AD managed identity**
+
+   * Needed so ResearchApp1 can authenticate securely without storing credentials.
+
+2. **Create an Azure Key Vault instance and configure an access policy**
+
+   * Key Vault stores encryption keys.
+   * Access policy ensures the managed identity has permission to use the keys.
+
+3. **Run the Always Encrypted wizard**
+
+   * This wizard configures column encryption and points to the Key Vault for key management.
+
+---
+
+### Answer:
+
+✅ Correct sequence is:
+
+1. **Create an Azure AD managed identity**
+2. **Create an Azure Key Vault instance and configure an access policy**
+3. **Run the Always Encrypted wizard**
+
+---
+
+⚡Pro tip:
+The option **“Create an Azure Key Vault instance and generate a secret”** is a distractor. For Always Encrypted, you store **keys**, not secrets.
+
+---
