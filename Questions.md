@@ -817,3 +817,54 @@ Good question 👌 Let’s analyze it.
 **D. Run dynamic management view-based queries**
 
 ---
+
+Great question 👍 Let’s break it down clearly:
+
+---
+
+### **Why “Simple layout (striping)” is the correct choice here**
+
+* You have **two P30 disks**, each provides **5,000 IOPS**.
+* Requirement: **10,000 IOPS**.
+* The **simple layout** (striping) combines both disks’ throughput and IOPS, giving you **aggregate performance** (5,000 + 5,000 = 10,000 IOPS).
+* This meets the requirement.
+
+---
+
+### **Other layouts and when they are used**
+
+1. **Mirror layout**
+
+   * Writes are duplicated across disks.
+   * You don’t get combined IOPS; instead, you get **redundancy**.
+   * Example: If you had two disks with 5,000 IOPS each, effective IOPS remains 5,000.
+   * Use case: **High availability and redundancy** (at the cost of performance/space).
+
+2. **Parity layout**
+
+   * Data + parity bits are striped across disks.
+   * Provides fault tolerance with better capacity than mirror, but **slower writes**.
+   * Use case: **Archival or workloads that need balance between capacity and resiliency**.
+   * (Not shown in your options, but good to know.)
+
+3. **Simple layout (striping)**
+
+   * Data is striped across disks, **no redundancy**.
+   * All disks contribute to performance (IOPS + throughput).
+   * Use case: **High-performance workloads where redundancy is not critical** (e.g., tempdb, non-critical analytical workloads, or when redundancy is provided elsewhere).
+
+4. **Storage Pool**
+
+   * Logical grouping of multiple physical disks.
+   * Foundation step before creating virtual disks with layouts.
+   * Use case: Always the **first step** when using Storage Spaces in Windows/Azure VM.
+
+---
+
+✅ In your scenario:
+
+* Performance (10,000 IOPS) is the **primary requirement**.
+* Redundancy is **not mentioned**.
+* So → **Storage Pool → Simple Layout → Volume** is correct.
+
+---
