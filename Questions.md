@@ -130,3 +130,42 @@ Let’s carefully check the requirements:
 
 👉 Correct Answer:
 **D. Azure SQL Managed Instance**
+
+
+We are designing a **star schema** for analytics.
+The extract includes **dimensions (descriptive attributes)** and **facts (measurable values)**.
+
+---
+
+### Given columns:
+
+* **EventCategory** → e.g., "Videos" → **dimension**
+* **EventAction** → e.g., "Play" → **dimension**
+* **EventLabel** → e.g., "Contoso Promotional" → **dimension**
+* **ChannelGrouping** → e.g., "Social" → **dimension**
+* **TotalEvents** → numeric → **fact**
+* **SessionsWithEvent** → numeric → **fact**
+* **UsersWithEvent** → numeric → **fact**
+
+---
+
+### Star schema mapping:
+
+1. **EventCategory** → goes to **DimEvent**
+   (It’s descriptive about the type of event.)
+
+2. **ChannelGrouping** → goes to **DimChannel**
+   (It describes the channel, so belongs to channel dimension.)
+
+3. **TotalEvents** → goes to **FactEvents**
+   (It’s a measure/metric, belongs in fact table.)
+
+---
+
+### Final Answer:
+
+* **EventCategory → DimEvent**
+* **ChannelGrouping → DimChannel**
+* **TotalEvents → FactEvents**
+
+
