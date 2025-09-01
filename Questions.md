@@ -489,4 +489,48 @@ Looking at the exhibit:
 
 ⚡ Tip: In SQL exams, whenever you see **Key Lookup** or **Index Scan** with high cost %, it usually means missing indexes → performance tuning required.
 
+Good question 👇
+
+We need anomaly detection for **streaming IoT hub data** with **minimum development effort**. Let’s evaluate:
+
+---
+
+### **Requirements**
+
+* **Send output to Azure Synapse** → must support Synapse sink integration.
+* **Identify spikes and dips in time series** → anomaly detection on real-time streaming data.
+* **Minimize development/configuration effort** → prefer serverless, built-in features over heavy coding.
+
+---
+
+### **Option Analysis**
+
+**A. Azure SQL Database**
+
+* Not suitable for anomaly detection on streaming data.
+* It’s more for storage, not real-time analytics.
+  ❌
+
+**B. Azure Databricks**
+
+* Powerful for machine learning and advanced analytics.
+* But requires **custom ML models**, coding, and more configuration.
+* Does not minimize effort.
+  ❌
+
+**C. Azure Stream Analytics**
+
+* Has **built-in anomaly detection functions** (e.g., `AnomalyDetection_SpikeAndDip`).
+* Natively integrates with **Azure IoT Hub (input)** and **Azure Synapse Analytics (output sink)**.
+* **Serverless, minimal setup**, exactly fits requirements.
+  ✅
+
+---
+
+### ✅ Correct Answer:
+
+**C. Azure Stream Analytics**
+
+---
+
 
