@@ -71,3 +71,30 @@ Let’s break it down:
 👉 Correct Answer:
 **A. Implement memory-optimized tables**
 
+
+Let’s analyze the scenario:
+
+* **Requirement:** Count **new events** in **five-minute intervals**.
+* **Important detail:** Must **report only events that arrive during the interval** (no late arrivals, no retractions).
+* **Sink:** Delta Lake table.
+
+---
+
+### Output modes in Structured Streaming:
+
+* **Complete** → rewrites the entire result table every trigger. Used for aggregations when you want the whole table. Not efficient here.
+* **Append** → only new rows (finalized results) are written to the sink. ✅
+* **Update** → only rows that changed since the last trigger are written (good for aggregations with late data).
+
+---
+
+Since the requirement says:
+
+* “**report only events that arrive during the interval**” → meaning finalized counts per window, not updates.
+* That matches **Append mode**, because results are appended once the window closes.
+
+---
+
+👉 Correct Answer:
+**B. append**
+
