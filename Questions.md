@@ -775,3 +775,45 @@ GO
 The option **“Create an Azure Key Vault instance and generate a secret”** is a distractor. For Always Encrypted, you store **keys**, not secrets.
 
 ---
+
+
+Good question 👌 Let’s analyze it.
+
+---
+
+### Scenario:
+
+* You have **an Azure SQL Database server** (`sqlsrv1`) with 10 databases.
+* Performance is slower than expected.
+* You specifically want to check **if the issue is related to `tempdb`**.
+
+---
+
+### Options:
+
+**A. Run Query Store-based queries**
+
+* Query Store helps with **query performance** over time (execution plans, regressions).
+* Not about `tempdb`. ❌
+
+**B. Review information provided by SQL Server Profiler-based traces**
+
+* SQL Profiler is not supported for Azure SQL Database. ❌
+
+**C. Review information provided by Query Performance Insight**
+
+* Gives insights into **top consuming queries** (DTU, CPU, IO, memory).
+* Doesn’t specifically help diagnose `tempdb` usage. ❌
+
+**D. Run dynamic management view (DMV)-based queries**
+
+* DMVs in Azure SQL Database can show resource usage, waits, and specifically **tempdb contention** (e.g., `sys.dm_db_resource_stats`, `sys.dm_exec_requests`, `sys.dm_db_session_space_usage`).
+* This is the correct way to check `tempdb` bottlenecks. ✅
+
+---
+
+### ✅ Correct Answer:
+
+**D. Run dynamic management view-based queries**
+
+---
