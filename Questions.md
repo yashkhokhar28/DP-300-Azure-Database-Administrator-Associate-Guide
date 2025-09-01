@@ -445,3 +445,48 @@ Alright, let’s carefully analyze this one ✅
 * **Deployment option**: **SQL Server on Azure Virtual Machines**
 * **Resiliency option**: **Auto-failover group**
 
+
+Great, let’s break this one down carefully 👇
+
+---
+
+### **NEW QUESTION 49 (Exam Topic 5)**
+
+You have an Azure SQL Database.
+You are reviewing a **slow performing query**. The screenshot shows a query plan with operators.
+
+---
+
+### **Step 1 – Identify what the exhibit shows**
+
+* In the query plan screenshot, the header indicates "Query cost relative to the batch: 100%".
+* The boxes show query execution operators with percentages.
+* This is a **visual execution plan** that SQL Server produces when you run queries.
+* Since it shows **estimated vs actual execution details** (with percentages), this is an **actual execution plan**.
+
+👉 **Answer:** **an actual execution plan**
+
+---
+
+### **Step 2 – Identify the operator in the plan**
+
+Looking at the exhibit:
+
+* The bottom operator is labeled **Clustered Index Scan**.
+* But the question asks for the **operator in the execution plan that indicates the query would benefit from tuning**.
+* The operator causing performance issues here is **Key Lookup (Clustered)** (since key lookups repeatedly access rows from a clustered index — expensive for performance).
+
+👉 **Answer:** **Key Lookup**
+
+---
+
+### ✅ Final Answer:
+
+1. The exhibit shows → **an actual execution plan**
+2. The operator in the execution plan that indicates query would benefit from performance tuning → **Key Lookup**
+
+---
+
+⚡ Tip: In SQL exams, whenever you see **Key Lookup** or **Index Scan** with high cost %, it usually means missing indexes → performance tuning required.
+
+
