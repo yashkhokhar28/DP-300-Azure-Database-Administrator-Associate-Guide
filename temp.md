@@ -1,7 +1,3 @@
-Got it 🚀 — let’s tie this directly to **DP-300 exam style** and keep it short + crisp:
-
----
-
 ### **Sharding Types (DP-300 context)**
 
 1. **Range-based sharding**
