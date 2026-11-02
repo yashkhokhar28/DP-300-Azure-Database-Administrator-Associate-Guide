@@ -55,6 +55,7 @@ After that, practise with [Questions.md](Questions.md) and the official practice
 - **[SYLLABUS.md](SYLLABUS.md)** lists every official skill as a checkbox, with a link to the lesson that teaches it.
 - **[Cheat Sheet.md](<Cheat Sheet.md>)** has the comparisons, tool choosers, top DMVs and exam traps on one page.
 - **[Questions.md](Questions.md)** has practice questions with explanations.
+- **[DP-300-Verified-QA.md](DP-300-Verified-QA.md)** has 230 practice questions with answers checked against Microsoft Learn.
 
 ## Practice and official links
 
